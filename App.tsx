@@ -1,14 +1,12 @@
-// App.js
 import 'react-native-reanimated';
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native';
-// import { MotiView } from '@motify/components';
 import { MotiView } from 'moti';
 import faker from 'faker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 
-const { width, height } = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 faker.seed(10);
 
@@ -17,12 +15,62 @@ const data = [...Array(20).keys()].map(() => ({
   job: faker.animal.crocodilia(),
 }));
 
-const _colors = {
-  active: `#FCD259ff`,
-  inactive: `#FCD25900`,
-};
 const _noSpacing = 0;
 const _spacing = 10;
+
+const _colors = {
+  active: {
+    background: `#FA4FB7`,
+    text: `#FFFFFF`,
+  },
+  inactive: {
+    background: `#FCD25900`,
+    text: `#36303F`,
+  },
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flatListStyle: { flexGrow: 0 },
+  contentContainerStyle: { paddingLeft: _spacing },
+  buttonStyle: {
+    marginRight: _spacing,
+    padding: _spacing,
+    borderWidth: 2,
+    borderColor: _colors.active.background,
+    borderRadius: 12,
+  },
+  buttonText: {
+    fontWeight: '700',
+  },
+  bottomBar: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: _spacing * 10,
+  },
+  bottomBarItems: {
+    alignItems: 'center',
+  },
+  title: {
+    color: '#36303F',
+    fontWeight: '700',
+    marginBottom: _spacing,
+  },
+  contentItems: {
+    flexDirection: 'row',
+    width: width / 2,
+    justifyContent: 'center',
+  },
+  arrowButton: {
+    padding: _spacing,
+    backgroundColor: _colors.active.background,
+    borderRadius: _spacing,
+  },
+});
 
 const App = () => {
   const ref = useRef<FlatList>(null);
@@ -39,14 +87,14 @@ const App = () => {
   }, [index, viewPosition]);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <FlatList
         ref={ref}
         initialScrollIndex={index}
-        style={{ flexGrow: 0 }}
+        style={styles.flatListStyle}
         data={data}
         keyExtractor={(item) => item.key}
-        contentContainerStyle={{ paddingLeft: _spacing }}
+        contentContainerStyle={styles.contentContainerStyle}
         showsHorizontalScrollIndicator={false}
         horizontal
         renderItem={({ item, index: fIndex }) => {
@@ -62,15 +110,14 @@ const App = () => {
                   type: 'timing',
                   duration: 500,
                 }}
-                style={{
-                  marginRight: _spacing,
-                  padding: _spacing,
-                  borderWidth: 2,
-                  borderColor: _colors.active,
-                  borderRadius: 12,
-                  backgroundColor: fIndex === index ? _colors.active : _colors.inactive,
-                }}>
-                <Text style={{ color: '#36303F', fontWeight: '700' }}>
+                style={[
+                  styles.buttonStyle,
+                  { backgroundColor: fIndex === index ? _colors.active.background : _colors.inactive.background, }
+                ]}>
+                <Text style={[
+                  styles.buttonText,
+                  { color: fIndex === index ? _colors.active.text : _colors.inactive.text, }
+                ]}>
                   {item.job}
                 </Text>
               </MotiView>
@@ -78,112 +125,80 @@ const App = () => {
           );
         }}
       />
+
       <View
-        style={{
-          alignItems: 'center',
-          flexDirection: 'row',
-          marginTop: _spacing * 10,
-        }}>
-        <View style={{ alignItems: 'center' }}>
+        style={styles.bottomBar}>
+        <View style={styles.bottomBarItems}>
           <Text
-            style={{
-              color: '#36303F',
-              fontWeight: '700',
-              marginBottom: _spacing,
-            }}>
+            style={styles.title}>
             Scroll position
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: width / 2,
-              justifyContent: 'center',
-            }}>
+
+          <View style={styles.contentItems}>
             <TouchableOpacity onPress={() => {
               setViewPosition(0);
             }}>
               <View
-                style={{
-                  padding: _spacing,
-                  backgroundColor: '#FCD259',
-                  borderRadius: _spacing,
-                  marginRight: _spacing,
-                }}>
-
-                <Entypo name='align-left' size={24} color='#36303F' />
+                style={[
+                  styles.arrowButton,
+                  { marginRight: _spacing, }
+                ]}>
+                <Entypo name='align-left' size={24} color='white' />
               </View>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={() => {
               setViewPosition(0.5);
             }}>
               <View
-                style={{
-                  padding: _spacing,
-                  backgroundColor: '#FCD259',
-                  borderRadius: _spacing,
-                  marginRight: _spacing,
-                }}>
-                <Entypo
-                  name='align-horizontal-middle'
-                  size={24}
-                  color='#36303F'
-                />
+                style={[
+                  styles.arrowButton,
+                  { marginRight: _spacing, }
+                ]}>
+                <Entypo name='align-horizontal-middle' size={24} color='white' />
               </View>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={() => {
               setViewPosition(1);
             }}>
               <View
-                style={{
-                  padding: _spacing,
-                  backgroundColor: '#FCD259',
-                  borderRadius: _spacing,
-                }}>
-                <Entypo name='align-right' size={24} color='#36303F' />
+                style={styles.arrowButton}>
+                <Entypo name='align-right' size={24} color='white' />
               </View>
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ alignItems: 'center' }}>
+
+        <View style={styles.bottomBarItems}>
           <Text
-            style={{ color: '#36303F', fontWeight: '700', marginBottom: 10 }}>
+            style={styles.title}>
             Navigation
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: width / 2,
-              justifyContent: 'center',
-            }}>
+
+          <View style={styles.contentItems}>
             <TouchableOpacity onPress={() => {
               if (index === 0)
                 return;
-
               setIndex(index - 1);
             }}>
               <View
-                style={{
-                  padding: _spacing,
-                  backgroundColor: '#FCD259',
-                  borderRadius: _spacing,
-                  marginRight: _spacing,
-                }}>
-                <Feather name='arrow-left' size={24} color='#36303F' />
+                style={[
+                  styles.arrowButton,
+                  { marginRight: _spacing, }
+                ]}>
+                <Feather name='arrow-left' size={24} color='white' />
               </View>
             </TouchableOpacity>
+
             <TouchableOpacity onPress={() => {
               if (index === data.length - 1)
                 return;
-
               setIndex(index + 1);
             }}>
               <View
-                style={{
-                  padding: _spacing,
-                  backgroundColor: '#FCD259',
-                  borderRadius: _spacing,
-                }}>
-                <Feather name='arrow-right' size={24} color='#36303F' />
+                style={styles.arrowButton}>
+                <Feather name='arrow-right' size={24} color='white' />
               </View>
             </TouchableOpacity>
           </View>
@@ -192,14 +207,5 @@ const App = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'red',
-  },
-});
 
 export default App;
