@@ -13,8 +13,10 @@
     "@types/faker": "^5.5.9",
     "@types/react-native-vector-icons": "^6.4.10",
     "faker": "^5.5.3",
+    "moti": "^0.17.1",
     "react": "17.0.2",
     "react-native": "0.66.4",
+    "react-native-reanimated": "^2.3.1",
     "react-native-vector-icons": "^9.0.0"
   },
   "devDependencies": {

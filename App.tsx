@@ -1,6 +1,9 @@
+// App.js
+import 'react-native-reanimated';
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 // import { MotiView } from '@motify/components';
+import { MotiView } from 'moti';
 import faker from 'faker';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
@@ -51,7 +54,14 @@ const App = () => {
             <TouchableOpacity onPress={() => {
               setIndex(fIndex);
             }}>
-              <View
+              <MotiView
+                animate={{
+                  opacity: fIndex === index ? 1 : 0.3,
+                }}
+                transition={{
+                  type: 'timing',
+                  duration: 500,
+                }}
                 style={{
                   marginRight: _spacing,
                   padding: _spacing,
@@ -63,7 +73,7 @@ const App = () => {
                 <Text style={{ color: '#36303F', fontWeight: '700' }}>
                   {item.job}
                 </Text>
-              </View>
+              </MotiView>
             </TouchableOpacity>
           );
         }}
